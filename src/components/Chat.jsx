@@ -18,6 +18,7 @@ import { useStreamChat } from '../context/stream'; // StreamChat instance from c
 import { useFirebase } from '../context/firebase'; // Firebase instance to get user data
 import CreateChannelComponent from './CreateChannelComponent'; // Component to list users and create channels
 import { useNavigate } from 'react-router-dom';
+import Loader from './Loader';
 
 const ChatComponent = () => {
     const [token, setToken] = useState(null);
@@ -39,7 +40,7 @@ const ChatComponent = () => {
 
     const fetchToken = async (userId) => {
         try {
-            const response = await fetch('http://localhost:3001/get-token', {
+            const response = await fetch('https://chat-backend-2c4u.onrender.com/get-token', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -134,7 +135,7 @@ const ChatComponent = () => {
         setIsModalOpen(false); // Close modal after channel creation
     };
 
-    if (loading) return <div>Loading Chat...</div>;
+    if (loading) return (<Loader />)
     if (error) return <div>{error}</div>;
 
     const filters = { type: 'messaging', members: { $in: [firebase.currentUser?.uid] } };

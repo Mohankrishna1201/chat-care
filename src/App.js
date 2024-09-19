@@ -1,25 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react'
+import { StreamChat } from 'stream-chat'
+import { Chat } from 'stream-chat-react'
 
-function App() {
+import ChannelListContainer from './components/ChannelListContainer'
+import { Route, Routes } from 'react-router-dom'
+import "./App.css"
+import SignUp from './components/SignUp'
+import Login from './components/Login'
+import { useFirebase } from './context/firebase';
+import { StreamChatProvider } from './context/stream'
+import ChatComponent from './components/Chat'
+import CreateChannelComponent from './components/CreateChannelComponent'
+import NavbarComponent from './components/NavBarComponent'
+const apiKey = "kuuuk3c7qeym"
+const client = StreamChat.getInstance(apiKey);
+
+export default function App() {
+  const firebase = useFirebase()
+  useEffect(() => {
+
+    firebase.getUserToken()
+  }, [])
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/firebase-messaging-sw.js')
+      .then((registration) => {
+        console.log('Service Worker registration successful with scope: ', registration.scope);
+      }).catch((err) => {
+        console.log('Service Worker registration failed: ', err);
+      });
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+    <div className="app_wrapper">
+      <NavbarComponent />
+      <StreamChatProvider>
 
-export default App;
+        <Routes>
+          <Route path="/" element={<SignUp />} />
+          <Route path="/main" element={<ChatComponent />} />
+          <Route path="/check" element={<ChannelListContainer />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/create-channel" element={<CreateChannelComponent />} />
+
+        </Routes>
+      </StreamChatProvider>
+
+    </div>
+  )
+}

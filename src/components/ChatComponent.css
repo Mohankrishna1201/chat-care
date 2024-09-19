@@ -1,0 +1,28 @@
+.chat-container {
+    display: flex;
+    height: 100vh;
+}
+
+.channel-list {
+    width: 25%;
+    border-right: 1px solid #ddd;
+    overflow-y: auto;
+}
+
+.chat-window {
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.placeholder h3 {
+    color: #888;
+}

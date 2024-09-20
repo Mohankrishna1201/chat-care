@@ -89,13 +89,15 @@ const ChatComponent = () => {
 
     useEffect(() => {
         const initializeChat = async () => {
-            setLoading(true);  // Start loading before initializing chat
+            setLoading(true);
             try {
                 const userDetails = await firebase.getUserDetails();
                 if (!userDetails) {
                     throw new Error('User not logged in');
                 }
-                await fetchToken(userDetails.userID);
+                await fetchToken(userDetails.userID);  // Proceed with fetching token
+
+                // Continue connecting to Stream even if token is not available
             } catch (err) {
                 console.error('Error initializing chat:', err);
                 setError('Error initializing chat');
@@ -103,6 +105,7 @@ const ChatComponent = () => {
                 setLoading(false);  // End loading once chat is initialized
             }
         };
+
 
         if (firebase.isLoggedIn) {
             initializeChat();
@@ -197,16 +200,33 @@ const ChatComponent = () => {
                             className="absolute inset-0 bg-black bg-opacity-50 lg:hidden z-40"
                             onClick={() => setIsSidebarOpen(false)}
                         >
-                            <div className="relative bottom-0 left-0 w-3/4 bg-[#17191c]  h-full shadow-lg">
+                            <div className="relative top-[10%] bottom-0 left-0 w-3/4 bg-[#17191c]  h-full shadow-lg">
+                                <div className="sticky top-0 p-4 bg-[#17191c]  shadow-lg z-10">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h1 className="text-lg font-semibold text-white">Create a Group</h1>
+                                        <button
+                                            onClick={() => setIsGroupModalOpen(true)} // Open modal on button click
+                                            className="p-2 bg-[#00b8d9] text-white rounded-full hover:bg-[#009ec3] transition-all duration-200 ease-in-out"
+                                        >
+                                            <FaUsers size={20} />
+                                        </button>
+
+                                    </div>
+
+                                    <CreateChannelComponent
+                                        users={filteredUsers}
+                                        handleUserClick={handleUserClick}
+                                    />
+                                </div>
                                 <ChannelList filters={filters} sort={sort} />
                             </div>
                         </div>
                     )}
                     <div className="grid grid-cols-1 lg:grid-cols-4 w-full h-full">
-                        {/* Sidebar (Hidden on mobile) */}
+
                         <div className="hidden lg:block col-span-1 bg-[#17191c]  h-full">
                             <div className="sticky-container h-screen flex flex-col">
-                                {/* Create Group Section */}
+
                                 <div className="sticky top-0 p-4 bg-[#17191c]  shadow-lg z-10">
                                     <div className="flex items-center justify-between mb-4">
                                         <h1 className="text-lg font-semibold text-white">Create a Group</h1>
@@ -225,19 +245,19 @@ const ChatComponent = () => {
                                     />
                                 </div>
 
-                                {/* Channel List */}
+
                                 <div className="flex-grow overflow-y-auto p-4">
                                     <ChannelList filters={filters} sort={sort} />
                                 </div>
                             </div>
                         </div>
 
-                        {/* Main Chat Window */}
+
                         <div className="col-span-3 bg-black flex flex-col h-full">
                             <Channel emojiPicker={null}>
                                 <Window>
                                     <div className="flex items-center justify-between gap-10 p-2 bg-[#17191c] border-b border-gray-700 lg:hidden">
-                                        {/* Left Icon and Channel Header combined */}
+
                                         <div className="flex items-center gap-2">
                                             <button onClick={() => setIsSidebarOpen(true)} className="p-2">
                                                 <IoArrowBack size={24} className="text-white" />
@@ -245,7 +265,7 @@ const ChatComponent = () => {
                                             <ChannelHeader />
                                         </div>
 
-                                        {/* Video Icon with circular style and right margin */}
+
                                         <button onClick={handleVideoNavigate} className="p-2 rounded-full bg-[#00b8d9] hover:bg-[#009bb3] mr-4">
                                             <MdVideocam size={24} className="text-white" />
                                         </button>

@@ -65,7 +65,7 @@ const ChatComponent = () => {
     const fetchToken = async (userId) => {
         setLoading(true); // Start loading before fetching token
         try {
-            const response = await fetch('http://localhost:3001/get-token', {
+            const response = await fetch('https://chat-backend-2c4u.onrender.com/get-token', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

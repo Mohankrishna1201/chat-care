@@ -68,7 +68,7 @@ export default function SignUp({ onLogIn }) {
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <img
                         className="mx-auto h-10 w-auto"
-                        src="https://cdn.dribbble.com/userupload/16669792/file/original-27348c47d6d8e141a0f4bdc42ae593c6.png?resize=1200x254"
+                        src="https://cdn.dribbble.com/userupload/16673750/file/original-3f2480fd160250a1445f2bdb740fae42.png?resize=1200x257"
                         alt="Your Company"
                     />
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-[#fefefe]">
@@ -123,7 +123,7 @@ export default function SignUp({ onLogIn }) {
                         <div>
                             <button
                                 type="submit"
-                                className="flex w-full justify-center rounded-md bg-[#00b8d9] hover:bg-[#4bda7d] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                className="flex w-full justify-center rounded-md bg-[#00b8d9] hover:bg-[#009bb3] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
                                 Signup
                             </button>
@@ -140,7 +140,7 @@ export default function SignUp({ onLogIn }) {
 
                     <p className="mt-2 text-center text-sm text-gray-500">
                         Already a member?{' '}
-                        <a href="/login" className="font-semibold leading-6 text-[#00b8d9] hover:text-[#4bda7d]">
+                        <a href="/login" className="font-semibold leading-6 text-[#00b8d9] hover:text-[#009bb3]">
                             login
                         </a>
                     </p>

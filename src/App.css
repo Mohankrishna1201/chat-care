@@ -1,0 +1,103 @@
+.str-chat__channel-list-messenger__main,
+.str-chat__channel-list-messenger-react__main,.str-chat__container  {
+    overflow-y: scroll !important; /* Enable vertical scroll */
+}
+
+/* For WebKit browsers (Chrome, Safari) */
+.str-chat__channel-list-messenger__main::-webkit-scrollbar,
+.str-chat__channel-list-messenger-react__main::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+/* Track */
+.str-chat__channel-list-messenger__main::-webkit-scrollbar-track,
+.str-chat__channel-list-messenger-react__main::-webkit-scrollbar-track,.str-chat__container  {
+    background: transparent; /* Track color */
+}
+
+/* Handle */
+.str-chat__channel-list-messenger__main::-webkit-scrollbar-thumb,
+.str-chat__channel-list-messenger-react__channel-list-messenger-react__main::-webkit-scrollbar-thumb,.str-chat__container  {
+    background: #00b8d9; /* Scrollbar color */
+    border-radius: 10px; /* Optional: Rounded corners */
+}
+
+/* Handle on hover */
+.str-chat__channel-list-messenger__main::-webkit-scrollbar-thumb:hover,
+.str-chat__channel-list-messenger-react__main::-webkit-scrollbar-thumb:hover,.str-chat__container  {
+    background: #00b8d9; /* Darker shade on hover */
+}
+
+.str-chat__main-panel-inner {
+    overflow-y: scroll !important; /* Enable vertical scroll */
+}
+
+/* For WebKit browsers (Chrome, Safari) */
+.str-chat__main-panel-inner::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+/* Track */
+.str-chat__main-panel-inner::-webkit-scrollbar-track {
+    background: transparent; /* Track color */
+}
+
+/* Handle */
+.str-chat__main-panel-inner::-webkit-scrollbar-thumb {
+    background: #00b8d9; /* Scrollbar color */
+    border-radius: 10px; /* Optional: Rounded corners */
+}
+
+/* Handle on hover */
+.str-chat__main-panel-inner::-webkit-scrollbar-thumb:hover {
+    background: #00a1b3; /* Darker shade on hover */
+}
+
+.str-chat__message-list-scroll {
+    overflow-y: scroll !important; /* Enable vertical scroll */
+}
+
+/* For WebKit browsers (Chrome, Safari) */
+.str-chat__message-list-scroll::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+/* Track */
+.str-chat__message-list-scroll::-webkit-scrollbar-track {
+    background: transparent; /* Track color */
+}
+
+/* Handle */
+.str-chat__message-list-scroll::-webkit-scrollbar-thumb {
+    background: #00b8d9; /* Scrollbar color */
+    border-radius: 10px; /* Optional: Rounded corners */
+}
+
+/* Handle on hover */
+.str-chat__message-list-scroll::-webkit-scrollbar-thumb:hover {
+    background: #00a1b3; /* Darker shade on hover */
+}
+.str-chat__main-panel-inner {
+    overflow-y: scroll !important; /* Enable vertical scroll */
+}
+
+/* For WebKit browsers (Chrome, Safari) */
+.str-chat__main-panel-inner::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+/* Track */
+.str-chat__main-panel-inner::-webkit-scrollbar-track {
+    background: transparent; /* Track color */
+}
+
+/* Handle */
+.str-chat__main-panel-inner::-webkit-scrollbar-thumb {
+    background: #00b8d9; /* Scrollbar color */
+    border-radius: 10px; /* Optional: Rounded corners */
+}
+
+/* Handle on hover */
+.str-chat__main-panel-inner::-webkit-scrollbar-thumb:hover {
+    background: #00a1b3; /* Darker shade on hover */
+}

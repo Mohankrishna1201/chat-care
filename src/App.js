@@ -12,6 +12,8 @@ import { StreamChatProvider } from './context/stream'
 import ChatComponent from './components/Chat'
 import CreateChannelComponent from './components/CreateChannelComponent'
 import NavbarComponent from './components/NavBarComponent'
+import VideoCall from './components/VideoCall'
+
 const apiKey = "kuuuk3c7qeym"
 const client = StreamChat.getInstance(apiKey);
 
@@ -42,6 +44,7 @@ export default function App() {
           <Route path="/check" element={<ChannelListContainer />} />
           <Route path="/login" element={<Login />} />
           <Route path="/create-channel" element={<CreateChannelComponent />} />
+          <Route path="/video" element={<VideoCall />} />
 
         </Routes>
       </StreamChatProvider>

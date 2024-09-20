@@ -102,7 +102,7 @@ export default function NavbarComponent({ photo, dname }) {
     ];
 
     return (
-        <div className="min-h-full bg-[#0d0d0d] text-gray-200 border-[#00b8d9] border-b-2">
+        <div className="h-[10%] bg-[#0d0d0d] text-gray-200 border-[#00b8d9] border-b-2">
             {loading ? (
                 <div className="flex items-center justify-center h-16">
                     <div className="loader">Loading...</div>
@@ -117,7 +117,7 @@ export default function NavbarComponent({ photo, dname }) {
                                         <div className="flex-shrink-0" >
                                             <img
                                                 className="h-8 w-[fit-content]"
-                                                src="https://cdn.dribbble.com/userupload/16669792/file/original-27348c47d6d8e141a0f4bdc42ae593c6.png?resize=1200x254"
+                                                src="https://cdn.dribbble.com/userupload/16673750/file/original-3f2480fd160250a1445f2bdb740fae42.png?resize=1200x257"
                                                 alt="Your Company"
 
                                             />

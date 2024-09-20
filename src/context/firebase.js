@@ -1,15 +1,39 @@
-
-
-
 import { initializeApp } from "firebase/app";
 import { createContext, useContext, useState, useEffect } from "react";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, } from 'firebase/auth'
-import { FacebookAuthProvider, signOut } from "firebase/auth";
-import { getFirestore, collection, addDoc, doc, setDoc, getDocs, query, where, updateDoc, deleteDoc } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { getMessaging, getToken } from "firebase/messaging";
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signInWithPopup,
+    GoogleAuthProvider,
+    onAuthStateChanged,
+    FacebookAuthProvider,
+    signOut,
+    sendPasswordResetEmail
+} from 'firebase/auth';
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    doc,
+    setDoc,
+    getDocs,
+    query,
+    where,
+    updateDoc,
+    deleteDoc
+} from "firebase/firestore";
+import {
+    getStorage,
+    ref,
+    uploadBytes,
+    getDownloadURL
+} from 'firebase/storage';
+import {
+    getMessaging,
+    getToken
+} from "firebase/messaging";
 
-import { sendPasswordResetEmail } from "firebase/auth";
 const FirebaseContext = createContext(null);
 
 const firebaseConfig = {
@@ -33,45 +57,119 @@ const firebaseApp = initializeApp(firebaseConfig);
 const firestore = getFirestore(firebaseApp);
 const storage = getStorage(firebaseApp);
 const messaging = getMessaging(firebaseApp);
+
 export const FirebaseProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const firebaseAuth = getAuth(firebaseApp)
+    const firebaseAuth = getAuth(firebaseApp);
+
     useEffect(() => {
         onAuthStateChanged(firebaseAuth, (user) => {
             if (user) setUser(user);
             else setUser(null);
-            // console.log(user);
-        })
+        });
     }, []);
+
     const currentUser = user;
+
     const UserLogout = async () => {
         await signOut(firebaseAuth);
         setUser(null);
     };
-    const UserSignUpwithEmailandPassword = (email, password) => {
-        return createUserWithEmailAndPassword(firebaseAuth, email, password);
+
+    const UserSignUpwithEmailandPassword = async (email, password) => {
+        try {
+            const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
+            await saveUserToFirestore(userCredential.user);
+            return userCredential;
+        } catch (error) {
+            console.error('Error signing up:', error);
+            throw error;
+        }
     };
 
-    const UserLoginwithEmailandPassword = (email, password) => {
-        return signInWithEmailAndPassword(firebaseAuth, email, password);
+    const UserLoginwithEmailandPassword = async (email, password) => {
+        try {
+            const userCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
+            await saveUserToFirestore(userCredential.user);
+            return userCredential;
+        } catch (error) {
+            console.error('Error logging in:', error);
+            throw error;
+        }
     };
 
-    const UserLoginGoogle = () => {
-        return signInWithPopup(firebaseAuth, Googleprovider);
+    const UserLoginGoogle = async () => {
+        try {
+            const userCredential = await signInWithPopup(firebaseAuth, Googleprovider);
+            await saveUserToFirestore(userCredential.user);
+            return userCredential;
+        } catch (error) {
+            console.error('Error with Google login:', error);
+            throw error;
+        }
+    };
 
-    }
+    const UserLoginFacebook = async () => {
+        try {
+            const userCredential = await signInWithPopup(firebaseAuth, Facebookprovider);
+            await saveUserToFirestore(userCredential.user);
+            return userCredential;
+        } catch (error) {
+            console.error('Error with Facebook login:', error);
+            throw error;
+        }
+    };
+
     const sendPasswordReset = (email) => {
         return sendPasswordResetEmail(firebaseAuth, email);
     };
-    const UserLoginFacebook = () => {
-        return signInWithPopup(firebaseAuth, Facebookprovider);
 
-    }
+    const getUserToken = async () => {
+        const permission = await Notification.requestPermission();
+        console.log(permission);
+
+        if (permission === 'granted') {
+            try {
+                const token = await getToken(messaging, {
+                    vapidKey: "BPKC7TV7HTzFCj09cvK6k5KZDMFERejrpN9FjOFHdigCQi1EqpHkyGhNoHmtxsqAPtHAtgdteyL0TePRdUPhJMA"
+                });
+                console.log(token);
+                return token;
+            } catch (error) {
+                console.error('Error getting token:', error);
+                return null;
+            }
+        } else {
+            console.warn('Notification permission denied.');
+            return null;
+        }
+    };
+
+    const saveUserToFirestore = async (user) => {
+        try {
+            const token = await getUserToken();
+            const userRef = doc(firestore, `users/${user.uid}`);
+
+            await setDoc(userRef, {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName || user.email.split('@')[0], // Use part of email if displayName is not available
+                photoURL: user.photoURL || "https://cdn.dribbble.com/userupload/16679327/file/original-488cabe1e6982d3315c6e878b1b6b85f.png?resize=400x400",
+                notificationToken: token || null,
+                lastLogin: new Date()
+            }, { merge: true });
+
+            console.log('User data successfully saved to Firestore');
+        } catch (error) {
+            console.error('Error saving user data to Firestore:', error);
+        }
+    };
+
     const isLoggedIn = user ? true : false;
 
-
     let userNotificationStatus = null;
-    // Import necessary Firestore methods
+
+    // Existing functions remain unchanged...
 
     const getAllUsers = async () => {
         try {
@@ -84,25 +182,6 @@ export const FirebaseProvider = ({ children }) => {
         }
     };
 
-
-    const getUserToken = async () => {
-        const permission = await Notification.requestPermission();
-        console.log(permission);
-
-        if (permission === 'granted') {
-            const token = await getToken(messaging, {
-                vapidKey: "BPKC7TV7HTzFCj09cvK6k5KZDMFERejrpN9FjOFHdigCQi1EqpHkyGhNoHmtxsqAPtHAtgdteyL0TePRdUPhJMA"
-            });
-            console.log(token);
-
-            if (token) {
-                return token;
-            }
-        } else {
-            userNotificationStatus = 'denied'; // Set variable value if permission is not granted
-        }
-    };
-
     const handleToken = async () => {
         if (!currentUser) {
             console.error('Current user is null. Please register to get a token.');
@@ -112,7 +191,7 @@ export const FirebaseProvider = ({ children }) => {
         const token = await getUserToken();
         if (!token) {
             console.error('Failed to retrieve token. Token is null or undefined.');
-
+            return;
         }
 
         const userTokenDocRef = doc(firestore, `tokens/${currentUser.uid}`);
@@ -123,12 +202,12 @@ export const FirebaseProvider = ({ children }) => {
             }, { merge: true });
 
             console.log('Token successfully saved for the user.', token);
-
         } catch (error) {
             console.error('Error saving token:', error);
         }
         return token;
     };
+
     const DataOfUserTokens = [];
 
     const getSavedToken = async () => {
@@ -160,18 +239,13 @@ export const FirebaseProvider = ({ children }) => {
         }
     };
 
-
-
     const getUser = () => {
-
         return getDocs(collection(firestore, 'users'));
-    }
+    };
 
     const getImageUrl = (path) => {
         return getDownloadURL(ref(storage, path));
-    }
-
-
+    };
 
     const getUserDetails = async () => {
         if (!currentUser) {
@@ -183,23 +257,42 @@ export const FirebaseProvider = ({ children }) => {
 
         if (!token) {
             console.error('Failed to retrieve token.');
-
-
             return null;
         }
         console.log('check here', token, currentUser.email)
         return {
-            name: currentUser.displayName,
+            name: currentUser.displayName
+                ? currentUser.displayName
+                : currentUser.email.substring(0, 8), // Use first 8 characters of email if displayName is not available
             userID: currentUser.uid,
             userToken: token,
             userEmail: currentUser.email,
-            userImg: currentUser.photoURL,
-
+            userImg: currentUser.photoURL
+                ? currentUser.photoURL
+                : "https://cdn.dribbble.com/userupload/16679327/file/original-488cabe1e6982d3315c6e878b1b6b85f.png?resize=400x400", // Provide a default image if photoURL is not available
         };
     };
 
     return (
-        <FirebaseContext.Provider value={{ UserSignUpwithEmailandPassword, UserLoginwithEmailandPassword, UserLoginGoogle, UserLoginFacebook, isLoggedIn, UserLogout, currentUser, getUser, getImageUrl, getUserToken, messaging, handleToken, getSavedToken, getUserDetails, sendPasswordReset, userNotificationStatus, getAllUsers }}>
+        <FirebaseContext.Provider value={{
+            UserSignUpwithEmailandPassword,
+            UserLoginwithEmailandPassword,
+            UserLoginGoogle,
+            UserLoginFacebook,
+            isLoggedIn,
+            UserLogout,
+            currentUser,
+            getUser,
+            getImageUrl,
+            getUserToken,
+            messaging,
+            handleToken,
+            getSavedToken,
+            getUserDetails,
+            sendPasswordReset,
+            userNotificationStatus,
+            getAllUsers
+        }}>
             {children}
         </FirebaseContext.Provider>
     );

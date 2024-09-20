@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import Loader from './Loader';
 import CreateChannelComponent from './CreateChannelComponent';
 import CreateGroupComponent from './CreateGroupComponent';
+
 import { FaUsers } from 'react-icons/fa';
 import { MdVideocam } from 'react-icons/md';
 
@@ -181,6 +182,9 @@ const ChatComponent = () => {
         user.displayName.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    // Check if there are any active channels
+    const hasActiveChannels = !!activeChannel;
+
     return (
         <>
             <Chat theme="str-chat__theme-dark" client={client}>
@@ -190,8 +194,34 @@ const ChatComponent = () => {
                             className="absolute inset-0 bg-black bg-opacity-50 lg:hidden z-40"
                             onClick={() => setIsSidebarOpen(false)}
                         >
-                            <div className="relative bottom-0 left-0 w-3/4 bg-[#17191c]  h-full shadow-lg">
-                                <ChannelList filters={filters} sort={sort} />
+                            <div className="relative top-[9%] bottom-0 left-0 w-3/4 bg-[#17191c]  h-full shadow-lg">
+                                <div className=" col-span-1 bg-[#17191c]  h-full">
+                                    <div className="sticky-container h-screen flex flex-col">
+                                        {/* Create Group Section */}
+                                        <div className="sticky top-0 p-4 bg-[#17191c]  shadow-lg z-10">
+                                            <div className="flex items-center justify-between mb-4">
+                                                <h1 className="text-lg font-semibold text-white">Create a Group</h1>
+                                                <button
+                                                    onClick={() => setIsGroupModalOpen(true)} // Open modal on button click
+                                                    className="p-2 bg-[#00b8d9] text-white rounded-full hover:bg-[#009ec3] transition-all duration-200 ease-in-out"
+                                                >
+                                                    <FaUsers size={20} />
+                                                </button>
+
+                                            </div>
+
+                                            <CreateChannelComponent
+                                                users={filteredUsers}
+                                                handleUserClick={handleUserClick}
+                                            />
+                                        </div>
+
+                                        {/* Channel List */}
+                                        <div className="flex-grow overflow-y-auto p-4">
+                                            <ChannelList filters={filters} sort={sort} />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     )}
@@ -227,53 +257,52 @@ const ChatComponent = () => {
 
                         {/* Main Chat Window */}
                         <div className="col-span-3 bg-black flex flex-col h-full">
-                            <Channel emojiPicker={null}>
-                                <Window>
-                                    <div className="flex items-center justify-between gap-10 p-2 bg-[#17191c] border-b border-gray-700 lg:hidden">
-                                        {/* Left Icon and Channel Header combined */}
-                                        <div className="flex items-center gap-2">
-                                            <button onClick={() => setIsSidebarOpen(true)} className="p-2">
-                                                <IoArrowBack size={24} className="text-white" />
+                            {!hasActiveChannels ? (
+                                // Render Welcome component if there are no active channels
+                                <Welcome users={filteredUsers} handleUserClick={handleUserClick} />
+                            ) : (
+                                // Render the chat interface if there are active channels
+                                <Channel emojiPicker={null}>
+                                    <Window>
+                                        <div className="flex items-center justify-between gap-10 p-2 bg-[#17191c] border-b border-gray-700 lg:hidden">
+                                            {/* Left Icon and Channel Header combined */}
+                                            <div className="flex items-center gap-2">
+                                                <button onClick={() => setIsSidebarOpen(true)} className="p-2">
+                                                    <IoArrowBack size={24} className="text-white" />
+                                                </button>
+                                                <ChannelHeader />
+                                            </div>
+
+                                            {/* Video Icon with circular style and right margin */}
+                                            <button onClick={handleVideoNavigate} className="p-2 rounded-full bg-[#00b8d9] hover:bg-[#009bb3] mr-4">
+                                                <MdVideocam size={24} className="text-white" />
                                             </button>
-                                            <ChannelHeader />
                                         </div>
 
-                                        {/* Video Icon with circular style and right margin */}
-                                        <button onClick={handleVideoNavigate} className="p-2 rounded-full bg-[#00b8d9] hover:bg-[#009bb3] mr-4">
-                                            <MdVideocam size={24} className="text-white" />
-                                        </button>
-                                    </div>
+                                        <div className="hidden lg:flex items-center justify-between bg-[#17191c] p-2 border-b border-gray-700">
+                                            <ChannelHeader />
+                                            <button onClick={handleVideoNavigate} className="p-2 rounded-full bg-[#00b8d9] hover:bg-[#009bb3] mr-4">
+                                                <MdVideocam size={24} className="text-white" />
+                                            </button>
+                                        </div>
 
+                                        {/* Messages */}
+                                        <div className="flex-grow overflow-y-auto p-4 bg-black">
+                                            <MessageList />
+                                        </div>
 
-
-                                    <div className="hidden lg:flex items-center justify-between bg-[#17191c] p-2 border-b border-gray-700">
-
-                                        <ChannelHeader />
-
-
-                                        <button onClick={handleVideoNavigate} className="p-2 rounded-full bg-[#00b8d9] hover:bg-[#009bb3] mr-4">
-                                            <MdVideocam size={24} className="text-white" />
-                                        </button>
-                                    </div>
-
-
-                                    {/* Messages */}
-                                    <div className="flex-grow overflow-y-auto p-4 bg-black">
-                                        <MessageList />
-                                    </div>
-
-                                    {/* Message Input */}
-                                    <div className="sticky bottom-0">
-                                        <MessageInput />
-                                    </div>
-                                </Window>
-                                <Thread />
-                            </Channel>
+                                        {/* Message Input */}
+                                        <div className="sticky bottom-0">
+                                            <MessageInput />
+                                        </div>
+                                    </Window>
+                                    <Thread />
+                                </Channel>
+                            )}
                         </div>
                     </div>
                 </div>
             </Chat>
-
 
             {isGroupModalOpen && (
                 <CreateGroupComponent
@@ -287,3 +316,29 @@ const ChatComponent = () => {
 };
 
 export default ChatComponent;
+
+
+
+const Welcome = ({ users, handleUserClick }) => {
+    return (
+        <div className="flex flex-col items-center justify-center h-screen bg-[#0d0d0d] text-white p-8">
+            <div className="text-center">
+                <h1 className="text-4xl font-bold mb-4 text-[#00b8d9]">Welcome to Chat Care</h1>
+                <p className="text-lg text-gray-300 mb-8">
+                    Start a conversation or create a new channel to begin chatting.
+                </p>
+            </div>
+
+            <div className="w-full max-w-lg">
+                <CreateChannelComponent
+                    users={users}
+                    handleUserClick={handleUserClick}
+                />
+            </div>
+
+            <div className="mt-8">
+                <p className="text-sm text-gray-500">Connect with your friends and colleagues seamlessly.</p>
+            </div>
+        </div>
+    );
+};

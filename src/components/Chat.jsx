@@ -141,8 +141,9 @@ const ChatComponent = () => {
         setActiveChannel(selectedChannel);
     };
     const handleVideoNavigate = () => {
-        navigate('/video');
-    }
+        window.open('/video', '_blank');
+    };
+
     const handleUserClick = async (selectedUserId) => {
         if (!client || !firebase.currentUser) return;
 
@@ -250,7 +251,7 @@ const ChatComponent = () => {
                                         <ChannelHeader />
 
 
-                                        <button className="p-2 rounded-full bg-[#00b8d9] hover:bg-[#009bb3] mr-4">
+                                        <button onClick={handleVideoNavigate} className="p-2 rounded-full bg-[#00b8d9] hover:bg-[#009bb3] mr-4">
                                             <MdVideocam size={24} className="text-white" />
                                         </button>
                                     </div>

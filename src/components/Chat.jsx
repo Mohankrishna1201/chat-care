@@ -42,6 +42,7 @@ const ChatComponent = () => {
         }
     }, [firebase, navigate]);
 
+
     useEffect(() => {
         const fetchUsers = async () => {
             setLoading(true); // Start loading before fetching users

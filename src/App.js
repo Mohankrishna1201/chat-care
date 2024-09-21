@@ -34,7 +34,7 @@ export default function App() {
   }
 
   return (
-    <div className="app_wrapper">
+    <div className="app_wrapper bg-[#0d0d0d]">
       <NavbarComponent />
       <StreamChatProvider>
 

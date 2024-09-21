@@ -101,3 +101,37 @@
 .str-chat__main-panel-inner::-webkit-scrollbar-thumb:hover {
     background: #00a1b3; /* Darker shade on hover */
 }
+
+
+/* General Animation for form appearance */
+@keyframes slideInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Use this class to trigger animation from left */
+.animate-from-left {
+  animation: slideInFromLeft 0.6s ease-out;
+}
+
+/* Use this class to trigger animation from right */
+.animate-from-right {
+  animation: slideInFromRight 0.6s ease-out;
+}
